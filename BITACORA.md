@@ -206,3 +206,10 @@ Para el informe: tablas de métricas, figura AUC por escenario, tabla de ceros, 
 - El proyecto anterior de riesgo académico se movió a archivo-riesgo-academico/.
 - Se agregó README.md con qué es, cómo verlo, cómo reproducir el entrenamiento, los resultados, la parte discreta y los límites.
 - Falta por hacer: publicar en GitHub Pages (Settings -> Pages -> Deploy from a branch -> main -> /docs) y probarlo en el celular con dibujos de verdad, que es la prueba que de verdad importa.
+
+## 2026-11-04 · Extra · Dos formas de ejecutarla sin GitHub
+- Qué se hizo: codigo/un_solo_archivo.py arma Cifra-un-solo-archivo.html, que mete dentro del HTML el CSS, los cuatro archivos de JavaScript, los pesos, las plantillas y el mosaico de referencia como data URI. Pesa 0.95 MB y abre con doble clic, sin servidor y sin internet.
+- Por qué hacía falta: la versión de docs/ usa módulos de JavaScript y fetch, y los navegadores bloquean las dos cosas con file://. La app ya avisaba de esto con un mensaje, pero no resolvía el caso de querer mostrarla sin montar nada.
+- Verificación: las mismas 26 comprobaciones del T19, corridas sobre file:///…/Cifra-un-solo-archivo.html, pasan todas. Es la misma app; cambia solo el empaquetado.
+- También se agregó servidor.bat, que levanta el servidor local en Windows y muestra las IP del computador para entrar desde el celular por Wi-Fi, con aviso sobre el Firewall. Tiene salida alterna si no encuentra Python.
+- Archivos: Cifra-un-solo-archivo.html, servidor.bat, codigo/un_solo_archivo.py, resultados/t20_un_solo_archivo.json

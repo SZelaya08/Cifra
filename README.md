@@ -21,22 +21,39 @@ parte.
 
 ## Cómo verlo
 
-Es una página estática: basta con servirla.
+Hay tres formas, de la más simple a la más completa.
+
+**1. Doble clic, sin instalar nada.** Abrir `Cifra-un-solo-archivo.html`. Es la
+misma app con todo adentro (estilos, código, pesos e imágenes), así que funciona
+sin servidor y sin internet. Sirve para mostrarla en un computador prestado o
+para entregarla como un archivo suelto.
+
+**2. Servidor local, para probarla en el celular sin publicar nada.** En Windows,
+doble clic a `servidor.bat`: abre la app en `http://localhost:8000` y muestra las
+direcciones IP del computador. Desde el celular, conectado al mismo Wi-Fi, se
+entra a `http://<esa-ip>:8000`. La primera vez Windows pregunta por el Firewall:
+hay que permitir el acceso en redes privadas.
+
+En Mac o Linux:
 
 ```bash
 cd docs
-python3 -m http.server 8000
-# abrir http://localhost:8000
+python3 -m http.server 8000     # luego abrir http://localhost:8000
 ```
 
-Hace falta un servidor (aunque sea el de arriba) porque la app usa módulos de
-JavaScript, y abrir `index.html` con doble clic los bloquea.
+**3. GitHub Pages**, para tener un enlace que funcione desde cualquier parte:
+Settings → Pages → Deploy from a branch → `main` → carpeta `/docs`.
 
-Publicada en GitHub Pages se abre directo desde el celular.
+Las formas 2 y 3 sirven la carpeta `docs/`, que usa módulos de JavaScript y por
+eso necesita un servidor: abrir `docs/index.html` con doble clic no funciona.
+Para eso está la versión de un solo archivo.
 
 ## Qué hay dentro
 
 ```
+Cifra-un-solo-archivo.html   la app entera en un archivo, para abrir con doble clic
+servidor.bat                 levanta el servidor local en Windows (para probar en el celular)
+
 docs/            la app (es lo que publica GitHub Pages)
   index.html     estructura
   estilos.css    tema claro y oscuro
@@ -56,6 +73,7 @@ codigo/          Python y pruebas
   discreta.py          la parte de matemática discreta, con números reales
   plantillas.py        pesos del modelo de una sola capa
   anclas.py            el mosaico de dígitos de referencia
+  un_solo_archivo.py   arma Cifra-un-solo-archivo.html a partir de docs/
   validar_red.mjs        la red de JavaScript contra la de Python
   validar_preproceso.mjs el preprocesado sobre imágenes reales
   probar_app.mjs         la app completa en un navegador
