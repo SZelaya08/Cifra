@@ -1,0 +1,8 @@
+{
+ "decimales": 4,
+ "accuracy_pesos_completos": 0.9665,
+ "accuracy_pesos_redondeados": 0.9665,
+ "predicciones_que_cambian": 0,
+ "diferencia_maxima_de_probabilidad": 0.00111984,
+ "bytes_pesos_json": 778197
+}

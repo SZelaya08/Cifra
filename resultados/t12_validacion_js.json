@@ -1,0 +1,14 @@
+{
+ "casos": 20,
+ "clases_iguales": 20,
+ "diferencia_maxima_de_probabilidad": 0.00001593,
+ "tolerancia": 0.0001,
+ "nota": "Python usa float64 y el navegador float32; por eso no son idénticos al bit.",
+ "entrenamiento": {
+  "perdida_inicial": 1.949849,
+  "perdida_tras_16_pasos": 0.000001,
+  "baja": true
+ },
+ "restaurar_originales_funciona": true,
+ "ok": true
+}

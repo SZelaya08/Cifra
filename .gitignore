@@ -1,0 +1,17 @@
+# dependencias de Node (solo hacen falta para correr las pruebas)
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# temporales
+*.log
+*.tmp

@@ -1,0 +1,31 @@
+{
+ "casos": 300,
+ "accuracy_entrada_directa": 0.9633,
+ "una_cifra_por_variante": {
+  "centrado": {
+   "accuracy": 0.96,
+   "detectadas_como_una_sola_cifra": "299/300"
+  },
+  "pequeño": {
+   "accuracy": 0.96,
+   "detectadas_como_una_sola_cifra": "300/300"
+  },
+  "grande": {
+   "accuracy": 0.94,
+   "detectadas_como_una_sola_cifra": "294/300"
+  },
+  "corrido a una esquina": {
+   "accuracy": 0.96,
+   "detectadas_como_una_sola_cifra": "300/300"
+  },
+  "corrido a la derecha": {
+   "accuracy": 0.96,
+   "detectadas_como_una_sola_cifra": "300/300"
+  }
+ },
+ "varias_cifras": {
+  "pruebas": 100,
+  "separadas_en_3": 99,
+  "numero_leido_completo_bien": 88
+ }
+}

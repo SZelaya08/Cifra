@@ -1,0 +1,75 @@
+{
+ "n": 10000,
+ "forma_imagen": [
+  28,
+  28
+ ],
+ "semilla": 42,
+ "rango_original": [
+  0,
+  255
+ ],
+ "rango_normalizado": [
+  0.0,
+  1.0
+ ],
+ "por_clase_total": {
+  "0": 1001,
+  "1": 1127,
+  "2": 991,
+  "3": 1032,
+  "4": 980,
+  "5": 863,
+  "6": 1014,
+  "7": 1070,
+  "8": 944,
+  "9": 978
+ },
+ "duplicados_exactos": 0,
+ "n_train": 8000,
+ "n_test": 2000,
+ "interseccion_indices": 0,
+ "imagenes_test_identicas_a_train": 0,
+ "por_clase_train": {
+  "0": 801,
+  "1": 902,
+  "2": 793,
+  "3": 826,
+  "4": 784,
+  "5": 690,
+  "6": 811,
+  "7": 856,
+  "8": 755,
+  "9": 782
+ },
+ "por_clase_test": {
+  "0": 200,
+  "1": 225,
+  "2": 198,
+  "3": 206,
+  "4": 196,
+  "5": 173,
+  "6": 203,
+  "7": 214,
+  "8": 189,
+  "9": 196
+ },
+ "train_con_aumento": 40000,
+ "pixeles_con_tinta_por_imagen": {
+  "media": 103.9729,
+  "min": 22,
+  "max": 275
+ },
+ "caja_alto": {
+  "media": 19.6871,
+  "max": 20
+ },
+ "caja_ancho": {
+  "media": 15.5907,
+  "max": 20
+ },
+ "lado_mayor_caja_mas_frecuente": 20,
+ "centro_masa_fila_media": 13.996282445515622,
+ "centro_masa_col_media": 14.00379574023573,
+ "imagenes_con_tinta_en_borde_2px": 1167
+}

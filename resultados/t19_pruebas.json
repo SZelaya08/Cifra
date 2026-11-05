@@ -1,0 +1,143 @@
+{
+ "comprobaciones": [
+  {
+   "nombre": "La red se carga y muestra su arquitectura",
+   "ok": true,
+   "detalle": "784 → 128 → 48 → 10"
+  },
+  {
+   "nombre": "La app lee lo mismo que la red de Python",
+   "ok": true,
+   "detalle": "25 de 25 coinciden"
+  },
+  {
+   "nombre": "El panel se abre",
+   "ok": true,
+   "detalle": ""
+  },
+  {
+   "nombre": "El diagrama de capas se dibuja",
+   "ok": true,
+   "detalle": "{\"w\":1828,\"h\":600}"
+  },
+  {
+   "nombre": "La sección neuronas muestra contenido",
+   "ok": true,
+   "detalle": ""
+  },
+  {
+   "nombre": "La sección calculo muestra contenido",
+   "ok": true,
+   "detalle": ""
+  },
+  {
+   "nombre": "La sección discreta muestra contenido",
+   "ok": true,
+   "detalle": ""
+  },
+  {
+   "nombre": "La sección entrenar muestra contenido",
+   "ok": true,
+   "detalle": ""
+  },
+  {
+   "nombre": "El cálculo muestra la fórmula con números",
+   "ok": true,
+   "detalle": ""
+  },
+  {
+   "nombre": "La sección discreta calcula la distancia de Hamming",
+   "ok": true,
+   "detalle": ""
+  },
+  {
+   "nombre": "Lee un número de tres cifras",
+   "ok": true,
+   "detalle": "leyó \"192\""
+  },
+  {
+   "nombre": "Agrega el número a la cuenta y suma",
+   "ok": true,
+   "detalle": "total 192"
+  },
+  {
+   "nombre": "El corrector de cifras se abre",
+   "ok": true,
+   "detalle": ""
+  },
+  {
+   "nombre": "Corregir una cifra recalcula el total",
+   "ok": true,
+   "detalle": "92"
+  },
+  {
+   "nombre": "El modo práctica cuenta los intentos",
+   "ok": true,
+   "detalle": "intentos 1"
+  },
+  {
+   "nombre": "Guarda los dibujos propios",
+   "ok": true,
+   "detalle": "4 dibujos guardados en este dispositivo."
+  },
+  {
+   "nombre": "El botón de reentrenar se habilita",
+   "ok": true,
+   "detalle": ""
+  },
+  {
+   "nombre": "El reentrenamiento termina y reporta",
+   "ok": true,
+   "detalle": "Listo. Con tus 4 dibujos pasó de 100.00% a 100.00%, y con las imágenes de referencia de 100.00% a 100.00%. Los cambios n"
+  },
+  {
+   "nombre": "Se puede volver a la red original",
+   "ok": true,
+   "detalle": ""
+  },
+  {
+   "nombre": "Celular (claro): no hay desplazamiento horizontal",
+   "ok": true,
+   "detalle": "sobra 0px"
+  },
+  {
+   "nombre": "Celular (claro): reconoce un dígito dibujado",
+   "ok": true,
+   "detalle": "leyó \"1\""
+  },
+  {
+   "nombre": "Celular (claro): el panel abierto tampoco desborda",
+   "ok": true,
+   "detalle": "sobra 0px"
+  },
+  {
+   "nombre": "Celular (oscuro): no hay desplazamiento horizontal",
+   "ok": true,
+   "detalle": "sobra 0px"
+  },
+  {
+   "nombre": "Celular (oscuro): reconoce un dígito dibujado",
+   "ok": true,
+   "detalle": "leyó \"1\""
+  },
+  {
+   "nombre": "Celular (oscuro): el panel abierto tampoco desborda",
+   "ok": true,
+   "detalle": "sobra 0px"
+  },
+  {
+   "nombre": "No hay errores en la consola",
+   "ok": true,
+   "detalle": ""
+  }
+ ],
+ "coincidencia_app_python": "25/25",
+ "numero_tres_cifras": {
+  "leido": "192",
+  "esperado": "192"
+ },
+ "mensaje_reentrenamiento": "Listo. Con tus 4 dibujos pasó de 100.00% a 100.00%, y con las imágenes de referencia de 100.00% a 100.00%. Los cambios no se guardan: al recargar la página vuelve la red original.",
+ "errores_de_consola": [],
+ "ok": true,
+ "fallas": []
+}
