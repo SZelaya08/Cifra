@@ -8,8 +8,8 @@
  * Uso: node validar_preproceso.mjs <casos.json> <pesos.json> <salida.json>
  */
 import fs from "node:fs";
-import { Red } from "../app/red.js";
-import { leerTinta, separarCifras, aEntrada, LADO } from "../app/preproceso.js";
+import { Red } from "../docs/red.js";
+import { leerTinta, separarCifras, aEntrada, LADO } from "../docs/preproceso.js";
 
 const LIENZO = 280;
 

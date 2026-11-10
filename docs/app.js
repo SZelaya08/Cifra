@@ -59,6 +59,7 @@ $("btn-tema").addEventListener("click", () => {
   const nuevo = temaActual() === "oscuro" ? "claro" : "oscuro";
   aplicarTema(nuevo);
   guardar(CLAVE_TEMA, nuevo);
+  recolorearTrazo();
   redibujarPanel();
 });
 aplicarTema(leerGuardado(CLAVE_TEMA, null));
@@ -92,7 +93,19 @@ function grosorTrazo() {
 }
 
 function colorTrazo() {
-  return getComputedStyle(document.documentElement).getPropertyValue("--tinta").trim() || "#000";
+  return getComputedStyle(document.documentElement).getPropertyValue("--color-ink").trim();
+}
+
+/* El trazo ya dibujado guarda el color de tinta del tema anterior. Al cambiar
+ * de tema se vuelve a teñir conservando la forma: se rellena todo el lienzo
+ * con la tinta nueva, recortada por lo que ya estaba pintado. */
+function recolorearTrazo() {
+  if (!hayTrazo) return;
+  ctx.save();
+  ctx.globalCompositeOperation = "source-in";
+  ctx.fillStyle = colorTrazo();
+  ctx.fillRect(0, 0, lienzo.width, lienzo.height);
+  ctx.restore();
 }
 
 function puntoDesde(e) {
@@ -181,37 +194,43 @@ function confianzaMinima() {
 
 function mostrarLectura() {
   const hay = estado.cifras.length > 0;
-  $("lectura").textContent = hay ? numeroLeido() : "—";
-  const conf = confianzaMinima();
-  $("confianza").textContent = hay ? pct(conf) : "—";
-  const relleno = $("barra-confianza-relleno");
-  relleno.style.width = hay ? `${Math.min(100, conf * 100)}%` : "0%";
-  relleno.style.background = !hay ? "var(--acento)" : conf < UMBRAL_DUDA ? "var(--mango)" : "var(--acento)";
+  const registro = document.querySelector(".registro");
+  // Sin dibujo el registro muestra qué falta y qué hacer, en vez de un hueco.
+  registro.toggleAttribute("data-vacio", !hay);
 
-  // Barras de probabilidad de la cifra seleccionada (o la última)
-  const cont = $("probabilidades");
+  $("lectura").textContent = hay ? numeroLeido() : "";
+  const conf = confianzaMinima();
+  $("confianza").textContent = hay ? pct(conf) : "";
+  const relleno = $("barra-confianza-relleno");
+  relleno.style.transform = `scaleX(${hay ? Math.min(1, conf) : 0})`;
+  relleno.toggleAttribute("data-duda", hay && conf < UMBRAL_DUDA);
+
+  // El libro mayor: una fila por dígito, la probabilidad alineada al decimal.
+  const cuerpo = $("probabilidades").tBodies[0];
   const probs = hay ? estado.cifras[estado.cifras.length - 1].prediccion.probabilidades : new Array(10).fill(0);
   const ganadora = hay ? probs.indexOf(Math.max(...probs)) : -1;
-  if (cont.children.length !== 10) {
-    cont.replaceChildren(...Array.from({ length: 10 }, (_, d) => {
-      const div = document.createElement("div");
-      div.className = "prob";
-      const barra = document.createElement("div");
+  if (cuerpo.children.length !== 10) {
+    cuerpo.replaceChildren(...Array.from({ length: 10 }, (_, d) => {
+      const tr = document.createElement("tr");
+      tr.className = "prob";
+      const th = document.createElement("th");
+      th.scope = "row"; th.className = "prob-etiqueta"; th.textContent = d;
+      const barra = document.createElement("td");
       barra.className = "prob-barra";
-      const rel = document.createElement("div");
-      rel.className = "prob-relleno";
-      barra.appendChild(rel);
-      const et = document.createElement("span");
-      et.className = "prob-etiqueta";
-      et.textContent = d;
-      div.append(barra, et);
-      return div;
+      const pista = document.createElement("span");
+      const i = document.createElement("i");
+      i.className = "prob-relleno";
+      pista.appendChild(i); barra.appendChild(pista);
+      const valor = document.createElement("td");
+      valor.className = "prob-valor num";
+      tr.append(th, barra, valor);
+      return tr;
     }));
   }
-  Array.from(cont.children).forEach((div, d) => {
-    div.classList.toggle("ganadora", d === ganadora);
-    div.querySelector(".prob-relleno").style.height = `${Math.max(2, probs[d] * 100)}%`;
-    div.title = `${d}: ${pct(probs[d])}`;
+  Array.from(cuerpo.children).forEach((tr, d) => {
+    tr.classList.toggle("ganadora", d === ganadora);
+    tr.querySelector(".prob-relleno").style.transform = `scaleX(${Math.max(0, Math.min(1, probs[d]))})`;
+    tr.querySelector(".prob-valor").textContent = hay ? pct(probs[d]) : "";
   });
 
   let nota = "";
@@ -267,7 +286,7 @@ function cambiarModo(modo) {
   $("vista-cuenta").hidden = modo !== "cuenta";
   $("vista-libre").hidden = modo !== "libre";
   $("consigna").textContent = {
-    practica: "Dibuja un solo número",
+    practica: "Dibuja este número",
     cuenta: "Escribe un precio o una cantidad",
     libre: "Dibuja lo que quieras",
   }[modo];
@@ -384,7 +403,7 @@ function pintarCuenta() {
   const n = estado.cuenta.reduce((s, i) => s + i.cifras.length, 0);
   const acc = estado.red ? estado.red.accuracyTest : 0;
   $("cuenta-riesgo").textContent = n === 0 ? "" :
-    `${n} cifras leídas. Con una exactitud de ${pct(acc)} por cifra, la probabilidad de que las ${n} estén bien es ${pct(acc ** n)}. Revisa las que salgan en naranja.`;
+    `${n} cifras leídas. Con una exactitud de ${pct(acc)} por cifra, la probabilidad de que las ${n} estén bien es ${pct(acc ** n)}. Revisa las que queden subrayadas.`;
 }
 $("cuenta-agregar").addEventListener("click", () => {
   if (!estado.cifras.length) return;
@@ -464,12 +483,11 @@ function redibujarPanel() {
       partes.push(["Neuronas encendidas en la capa 1", `${encendidas} de ${estado.red.capas[1]}`]);
     }
     for (const [k, v] of partes) {
-      const s = document.createElement("span");
-      s.append(`${k}: `);
-      const b = document.createElement("b");
-      b.textContent = v;
-      s.appendChild(b);
-      l.appendChild(s);
+      const dt = document.createElement("dt");
+      dt.textContent = k;
+      const dd = document.createElement("dd");
+      dd.textContent = v;
+      l.append(dt, dd);
     }
   }
 

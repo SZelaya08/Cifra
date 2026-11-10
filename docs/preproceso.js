@@ -14,7 +14,11 @@
 export const LADO = 28;
 export const CAJA = 20;          // lado mayor del dígito dentro de la imagen
 const UMBRAL_TINTA = 0.12;       // por debajo se considera fondo
-const AREA_MINIMA = 0.004;       // fracción del lienzo: por debajo es una mota
+// Una mota se mide contra el trazo más grande que haya en el lienzo, no contra
+// el lienzo entero: así da igual la proporción del lienzo y el tamaño con el
+// que cada persona escriba. El piso absoluto descarta el punto de un toque suelto.
+const AREA_MINIMA_RELATIVA = 0.06;
+const AREA_MINIMA_ABSOLUTA = 0.0006;
 
 /* Lee el canal alfa del lienzo como un mapa de tinta entre 0 y 1. */
 export function leerTinta(canvas) {
@@ -67,7 +71,8 @@ export function separarCifras({ tinta, w, h }) {
     grupos.push({ x0, x1, y0, y1, area });
   }
 
-  const minima = AREA_MINIMA * w * h;
+  const mayor = grupos.reduce((m, g) => Math.max(m, g.area), 0);
+  const minima = Math.max(AREA_MINIMA_ABSOLUTA * w * h, mayor * AREA_MINIMA_RELATIVA);
   let cajas = grupos.filter((g) => g.area >= minima);
   if (cajas.length === 0) cajas = grupos;          // si todo es pequeño, no descartar
   cajas.sort((a, b) => a.x0 - b.x0);

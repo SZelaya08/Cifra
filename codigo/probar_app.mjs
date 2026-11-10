@@ -6,11 +6,11 @@
  */
 import fs from "node:fs";
 import { chromium, devices } from "playwright";
-import { Red } from "../app/red.js";
+import { Red } from "../docs/red.js";
 
 const [url, rutaCasos, capturas, salida] = process.argv.slice(2);
 const casos = JSON.parse(fs.readFileSync(rutaCasos, "utf8")).casos;
-const pesos = JSON.parse(fs.readFileSync("../app/pesos.json", "utf8"));
+const pesos = JSON.parse(fs.readFileSync("../docs/pesos.json", "utf8"));
 const redRef = new Red(pesos);
 const LADO = 28;
 const errores = [];

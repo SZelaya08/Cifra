@@ -56,7 +56,10 @@ servidor.bat                 levanta el servidor local en Windows (para probar e
 
 docs/            la app (es lo que publica GitHub Pages)
   index.html     estructura
-  estilos.css    tema claro y oscuro
+  estilos.css    la hoja de la pantalla, sobre los dos archivos de abajo
+  tokens.css     los tokens del sistema: color, tipografía, espacio, tiempos
+  base.css       las reglas de base (tipografía, foco, desbordes, movimiento)
+  tipografias/   Hanken Grotesk, Newsreader e IBM Plex Mono, alojadas aquí
   red.js         la red: propagación hacia adelante y hacia atrás, escrita a mano
   preproceso.js  del trazo del dedo a la entrada de 28×28
   panel.js       el panel que muestra la red por dentro
@@ -107,6 +110,29 @@ node validar_red.mjs ../docs/pesos.json ../resultados/casos_prueba.json
 node validar_preproceso.mjs <casos.json> ../docs/pesos.json <salida.json>
 node probar_app.mjs http://localhost:8000/index.html <casos.json> ../capturas <salida.json>
 ```
+
+Las tres comprueban la app servida desde `docs/`. `probar_app.mjs` también corre
+contra `file:///.../Cifra-un-solo-archivo.html`, que es la misma app empaquetada.
+
+## El diseño
+
+La pantalla está armada como una publicación de tablas, no como un tablero: papel
+pizarra, tinta azul oscura, Hanken Grotesk para los títulos, Newsreader para el
+texto y las etiquetas, e IBM Plex Mono para todas las cifras, alineadas al
+decimal. Esquinas rectas, dos pesos de línea en vez de tarjetas, y una sola
+magenta que marca la acción principal, la pestaña activa y la fila que gana.
+
+La idea que ordena todo: **la hoja es la página**. A la izquierda se escribe, a
+la derecha un registro muestra lo que la red leyó, con los diez dígitos y su
+probabilidad como un libro mayor. Eso es lo que distingue esta app de un
+reconocedor cualquiera, y es lo que primero se ve.
+
+Las tres tipografías están dentro del repositorio, así que la app funciona sin
+internet y no depende de Google Fonts.
+
+El sistema se construyó con la skill Hallmark (tema Almanac). La primera línea
+de `docs/estilos.css` lleva el sello con las decisiones; `docs/tokens.css` tiene
+los dos temas, claro y oscuro, derivados y no invertidos.
 
 ## Resultados
 

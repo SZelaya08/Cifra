@@ -25,7 +25,7 @@ export function pintarEntrada(canvas, entrada, lado = LADO) {
   canvas.width = lado; canvas.height = lado;
   const ctx = canvas.getContext("2d");
   const img = ctx.createImageData(lado, lado);
-  const tinta = color("--tinta");
+  const tinta = color("--color-ink");
   const [r, g, b] = aRGB(tinta);
   for (let i = 0; i < entrada.length; i++) {
     const v = Math.max(0, Math.min(1, entrada[i]));
@@ -108,10 +108,10 @@ export class Diagrama {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, ancho, alto);
 
-    const cTinta = color("--tinta");
-    const cTenue = color("--tinta-tenue");
-    const cAcento = color("--acento");
-    const cBorde = color("--borde");
+    const cTinta = color("--color-ink");
+    const cTenue = color("--color-muted");
+    const cAcento = color("--color-accent");
+    const cBorde = color("--color-rule");
 
     this.puntos = [];
     const margenX = 8;
@@ -220,7 +220,7 @@ export class Diagrama {
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
       ctx.fillStyle = a > 0.01
         ? `rgba(${ar},${ag},${ab},${0.18 + 0.82 * Math.min(1, a)})`
-        : color("--papel-hundido");
+        : color("--color-paper-3");
       ctx.fill();
       if (a <= 0.01) { ctx.strokeStyle = cBorde; ctx.lineWidth = 1; ctx.stroke(); }
       if (sel && sel.capa === p.capa && sel.indice === p.indice) {
@@ -233,7 +233,7 @@ export class Diagrama {
     // --- etiquetas de la capa de salida ---
     const ultima = geom[geom.length - 1];
     if (ultima) {
-      ctx.font = `500 11px ${getComputedStyle(document.body).getPropertyValue("--mono") || "monospace"}`;
+      ctx.font = `500 11px ${getComputedStyle(document.body).getPropertyValue("--font-outlier") || "monospace"}`;
       ctx.fillStyle = cTenue;
       ctx.textAlign = "left"; ctx.textBaseline = "middle";
       for (let i = 0; i < 10; i++) {
@@ -287,10 +287,14 @@ export function dibujarRejillaNeuronas(contenedor, red, activaciones, soloActiva
     const medidor = document.createElement("div");
     medidor.className = "medidor";
     const i = document.createElement("i");
-    i.style.width = `${Math.min(100, (act / maxAct) * 100)}%`;
+    i.style.transform = `scaleX(${Math.min(1, act / maxAct)})`;
     medidor.appendChild(i);
     const s = document.createElement("small");
-    s.textContent = `n${j} · ${num(act, 1)}`;
+    s.append(`n${j} `);
+    const cifra = document.createElement("span");
+    cifra.className = "num";
+    cifra.textContent = num(act, 1);
+    s.appendChild(cifra);
     div.append(c, medidor, s);
     const activar = () => alSeleccionar({ capa: 1, indice: j });
     div.addEventListener("click", activar);
@@ -368,8 +372,6 @@ export function dibujarCalculo(contenedor, red, seleccion, hayDibujo) {
   }
   const textoCabeza = document.createElement("div");
   const h = document.createElement("h3");
-  h.style.fontFamily = "var(--display)";
-  h.style.fontSize = "16px";
   h.textContent = esSalida
     ? `Neurona de salida del dígito ${seleccion.indice}`
     : `Neurona ${seleccion.indice} de la capa oculta ${seleccion.capa}`;
@@ -469,7 +471,7 @@ export function dibujarDiscreta(contenedor, red, entrada, anclas, prediccion) {
   pre.className = "matriz-binaria";
   pre.textContent = filas.join("\n");
   contenedor.appendChild(bloque(
-    "1 · El dibujo como matriz binaria",
+    "1. El dibujo como matriz binaria",
     nota(`Con umbral 0.5, el dibujo es una matriz de 28×28 con ceros y unos. Tiene ${encendidos} píxeles encendidos de 784.`),
     pre,
   ));
@@ -492,7 +494,7 @@ export function dibujarDiscreta(contenedor, red, entrada, anclas, prediccion) {
   añadirDato("10 000", "imágenes con las que se entrenó");
   añadirDato("≈ 10^-232", "fracción del total que vimos");
   contenedor.appendChild(bloque(
-    "2 · Cuántos dibujos distintos caben",
+    "2. Cuántos dibujos distintos caben",
     nota("Cada píxel se enciende o no, así que hay 2 elevado a 28×28 matrices posibles. Casi todas son ruido: los dibujos que parecen un dígito son una parte diminuta."),
     datos,
   ));
@@ -524,7 +526,7 @@ export function dibujarDiscreta(contenedor, red, entrada, anclas, prediccion) {
       (prediccion !== null && prediccion !== undefined ? `, y la red dice ${prediccion}.` : ".")
     );
     contenedor.appendChild(bloque(
-      "3 · Distancia de Hamming a cada dígito",
+      "3. Distancia de Hamming a cada dígito",
       nota("La distancia de Hamming cuenta en cuántos píxeles se diferencian dos matrices. Es lo mismo que contar los unos de su XOR. Aquí se compara tu dibujo con la imagen promedio de cada dígito."),
       rank,
       comparacion,
@@ -533,7 +535,7 @@ export function dibujarDiscreta(contenedor, red, entrada, anclas, prediccion) {
 
   // 4. relación de equivalencia
   contenedor.appendChild(bloque(
-    "4 · Clases de equivalencia",
+    "4. Clases de equivalencia",
     nota("La relación «x e y representan el mismo dígito» es reflexiva, simétrica y transitiva, así que parte todos los dibujos posibles en 10 clases. La red aprende a decidir en cuál cae un dibujo nuevo, sin haberlo visto jamás."),
   ));
 
@@ -556,7 +558,7 @@ export function dibujarDiscreta(contenedor, red, entrada, anclas, prediccion) {
     "  no podría combinar trazos que por separado no bastan.",
   ].join("\n");
   contenedor.appendChild(bloque(
-    "5 · Por qué hacen falta capas ocultas",
+    "5. Por qué hacen falta capas ocultas",
     nota("Una neurona con umbral traza una recta y separa lo que queda a cada lado. AND y OR se separan con una recta; XOR no, porque sus dos casos verdaderos quedan en diagonal."),
     tabla,
   ));
@@ -573,7 +575,7 @@ export function dibujarCurva(canvas, valores) {
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.clearRect(0, 0, ancho, alto);
   if (!valores || valores.length === 0) {
-    ctx.fillStyle = color("--tinta-tenue");
+    ctx.fillStyle = color("--color-muted");
     ctx.font = "12px system-ui, sans-serif";
     ctx.textAlign = "center"; ctx.textBaseline = "middle";
     ctx.fillText("Aquí aparecerá la curva cuando reentrenes", ancho / 2, alto / 2);
@@ -585,25 +587,25 @@ export function dibujarCurva(canvas, valores) {
   const x = (i) => m.l + (i / Math.max(1, valores.length - 1)) * (ancho - m.l - m.r);
   const y = (v) => m.t + (1 - (v - min) / rango) * (alto - m.t - m.b);
 
-  ctx.strokeStyle = color("--borde"); ctx.lineWidth = 1;
+  ctx.strokeStyle = color("--color-rule"); ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(m.l, alto - m.b); ctx.lineTo(ancho - m.r, alto - m.b); ctx.stroke();
 
   ctx.beginPath();
   valores.forEach((v, i) => (i ? ctx.lineTo(x(i), y(v)) : ctx.moveTo(x(i), y(v))));
-  ctx.strokeStyle = color("--acento");
+  ctx.strokeStyle = color("--color-accent");
   ctx.lineWidth = 2; ctx.lineJoin = "round"; ctx.lineCap = "round";
   ctx.stroke();
 
   ctx.beginPath();
   ctx.arc(x(valores.length - 1), y(valores[valores.length - 1]), 3.2, 0, Math.PI * 2);
-  ctx.fillStyle = color("--acento"); ctx.fill();
+  ctx.fillStyle = color("--color-accent"); ctx.fill();
 
-  ctx.fillStyle = color("--tinta-suave");
+  ctx.fillStyle = color("--color-ink-2");
   ctx.font = "500 11px ui-monospace, monospace";
   ctx.textAlign = "left"; ctx.textBaseline = "middle";
   ctx.fillText(num(valores[valores.length - 1], 3), x(valores.length - 1) + 6, y(valores[valores.length - 1]));
   ctx.textBaseline = "top";
-  ctx.fillStyle = color("--tinta-tenue");
+  ctx.fillStyle = color("--color-muted");
   ctx.fillText("pérdida", m.l, 2);
 }
 

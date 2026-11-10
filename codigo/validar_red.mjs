@@ -2,7 +2,7 @@
  * que la de Python. Uso: node validar_red.mjs <app/pesos.json> <resultados/casos_prueba.json>
  */
 import fs from "node:fs";
-import { Red } from "../app/red.js";
+import { Red } from "../docs/red.js";
 
 const pesos = JSON.parse(fs.readFileSync(process.argv[2], "utf8"));
 const { casos } = JSON.parse(fs.readFileSync(process.argv[3], "utf8"));

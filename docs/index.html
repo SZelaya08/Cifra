@@ -3,154 +3,155 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#FBFAF6" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#141821" media="(prefers-color-scheme: dark)">
-<meta name="description" content="Reconocedor de dígitos escritos a mano con una red neuronal que corre en el navegador, con un panel para ver la red por dentro. Proyecto de Matemáticas Discretas.">
-<title>Cifra · reconocedor de dígitos</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<meta name="theme-color" content="#c4cbd2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#091017" media="(prefers-color-scheme: dark)">
+<meta name="description" content="Se escribe un número a mano y una red neuronal lo lee en el navegador, con un panel que muestra las neuronas, el cálculo y la matemática discreta detrás.">
+<title>Cifra</title>
 <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
 
-<header class="cabecera">
-  <div class="cabecera-interior">
-    <div class="marca">
-      <svg class="marca-icono" viewBox="0 0 32 32" aria-hidden="true">
-        <rect x="1.5" y="1.5" width="29" height="29" rx="5" fill="none" stroke="currentColor" stroke-width="2"/>
-        <path d="M11 20.5c0-5 2.2-9 5-9 1.8 0 2.9 1.3 3.4 3" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
-        <circle cx="21.5" cy="20.5" r="1.8" fill="currentColor"/>
+<header class="barra">
+  <div class="barra-fila">
+    <span class="marca">
+      <span class="marca-nombre">Cifra</span>
+    </span>
+    <button id="btn-tema" class="control control-sutil" type="button" aria-label="Cambiar entre tema claro y oscuro">
+      <svg class="icono" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+        <circle class="icono-sol" cx="8" cy="8" r="3.4" fill="currentColor"/>
+        <g class="icono-sol" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+          <path d="M8 1v1.6M8 13.4V15M1 8h1.6M13.4 8H15M3 3l1.1 1.1M11.9 11.9 13 13M13 3l-1.1 1.1M4.1 11.9 3 13"/>
+        </g>
+        <path class="icono-luna" d="M13.3 10.2A5.6 5.6 0 0 1 6 2.8a5.8 5.8 0 1 0 7.3 7.4Z" fill="currentColor"/>
       </svg>
-      <div>
-        <h1>Cifra</h1>
-        <p class="marca-sub">Lee números escritos a mano</p>
-      </div>
-    </div>
-    <button id="btn-tema" class="boton-icono" type="button" aria-label="Cambiar entre tema claro y oscuro">
-      <span data-tema-claro>☾</span><span data-tema-oscuro>☀</span>
+      <span class="control-texto">Tema</span>
     </button>
   </div>
-  <nav class="pestanas" role="tablist" aria-label="Modos">
-    <button class="pestana" role="tab" aria-selected="true" aria-controls="vista-practica" id="tab-practica" data-modo="practica">Práctica</button>
-    <button class="pestana" role="tab" aria-selected="false" aria-controls="vista-cuenta" id="tab-cuenta" data-modo="cuenta">Cuenta</button>
-    <button class="pestana" role="tab" aria-selected="false" aria-controls="vista-libre" id="tab-libre" data-modo="libre">Libre</button>
+  <nav class="pestanas" aria-label="Modos">
+    <button class="pestana" role="tab" aria-selected="true" aria-controls="vista-practica" id="tab-practica" data-modo="practica" type="button">Práctica</button>
+    <button class="pestana" role="tab" aria-selected="false" aria-controls="vista-cuenta" id="tab-cuenta" data-modo="cuenta" type="button">Cuenta</button>
+    <button class="pestana" role="tab" aria-selected="false" aria-controls="vista-libre" id="tab-libre" data-modo="libre" type="button">Libre</button>
   </nav>
 </header>
 
-<main class="contenido">
+<main class="taller">
 
-  <p id="aviso-carga" class="aviso">Cargando la red…</p>
+  <p id="aviso-carga" class="aviso" role="status">Cargando la red.</p>
 
-  <!-- ===== Zona de dibujo, común a los tres modos ===== -->
-  <section class="tarjeta lienzo-tarjeta">
-    <div class="lienzo-encabezado">
-      <p id="consigna" class="consigna">Dibuja un número</p>
-      <div class="lienzo-acciones">
-        <label class="grosor" for="grosor">
-          <span>Trazo</span>
-          <input type="range" id="grosor" min="3" max="14" step="1" value="7" aria-label="Grosor del trazo">
-        </label>
-        <button id="btn-borrar" class="boton boton-suave" type="button">Borrar</button>
-      </div>
+  <!-- ===== Columna izquierda: la hoja ===== -->
+  <section class="hoja" aria-labelledby="consigna">
+    <div class="hoja-cabeza">
+      <h1 id="consigna">Dibuja un número</h1>
+      <p id="practica-objetivo" class="objetivo num">7</p>
     </div>
-    <div class="lienzo-caja">
+
+    <div class="hoja-campo">
       <canvas id="lienzo" aria-label="Zona para dibujar con el dedo, el lápiz o el mouse"></canvas>
       <div id="guias" class="guias" aria-hidden="true"></div>
-      <p id="pista-lienzo" class="pista-lienzo">Escribe aquí con el dedo o el lápiz</p>
+      <p id="pista-lienzo" class="pista">Escribe aquí con el dedo o el lápiz</p>
+    </div>
+
+    <div class="hoja-pie">
+      <label class="trazo" for="grosor">
+        <span>Trazo</span>
+        <input type="range" id="grosor" min="3" max="14" step="1" value="7">
+      </label>
+      <button id="btn-borrar" class="control" type="button">Borrar</button>
     </div>
   </section>
 
-  <!-- ===== Lectura de la red ===== -->
-  <section class="tarjeta lectura" aria-live="polite">
-    <div class="lectura-principal">
-      <div class="lectura-numero">
-        <span class="etiqueta-campo">La red lee</span>
-        <output id="lectura" class="numero-grande">—</output>
-      </div>
-      <div class="lectura-confianza">
-        <span class="etiqueta-campo">Seguridad</span>
-        <output id="confianza" class="numero-medio">—</output>
-        <div class="barra-confianza"><div id="barra-confianza-relleno"></div></div>
-      </div>
+  <!-- ===== Columna derecha: el registro de lectura ===== -->
+  <aside class="registro" aria-live="polite" aria-label="Lo que lee la red">
+    <div class="registro-cabeza">
+      <h2 class="registro-titulo">La red lee</h2>
+      <output id="lectura" class="leida num"></output>
+      <p class="registro-vacio">Todavía no hay nada escrito. Dibuja en la hoja y la lectura aparece aquí.</p>
+      <dl class="seguridad">
+        <dt>Seguridad</dt>
+        <dd><output id="confianza" class="num"></output></dd>
+      </dl>
+      <div class="medida" aria-hidden="true"><i id="barra-confianza-relleno"></i></div>
     </div>
-    <div id="probabilidades" class="probabilidades"></div>
+
+    <table class="ledger" id="probabilidades">
+      <caption class="visually-hidden">Probabilidad que la red da a cada dígito</caption>
+      <thead>
+        <tr><th scope="col">Dígito</th><th scope="col" class="ledger-peso">Peso</th><th scope="col" class="num">Probabilidad</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
     <p id="nota-lectura" class="nota"></p>
-  </section>
+  </aside>
 
   <!-- ===== Modo práctica ===== -->
-  <section class="tarjeta vista" id="vista-practica" role="tabpanel" aria-labelledby="tab-practica">
-    <div class="practica-cabeza">
-      <div>
-        <span class="etiqueta-campo">Dibuja este número</span>
-        <p id="practica-objetivo" class="numero-objetivo">7</p>
-      </div>
-      <div class="practica-marcador">
-        <div><span id="practica-aciertos">0</span><small>aciertos</small></div>
-        <div><span id="practica-intentos">0</span><small>intentos</small></div>
-        <div><span id="practica-racha">0</span><small>racha</small></div>
-      </div>
+  <section class="vista" id="vista-practica" role="tabpanel" aria-labelledby="tab-practica">
+    <div class="marcador">
+      <dl><dt>Aciertos</dt><dd id="practica-aciertos" class="num">0</dd></dl>
+      <dl><dt>Intentos</dt><dd id="practica-intentos" class="num">0</dd></dl>
+      <dl><dt>Racha</dt><dd id="practica-racha" class="num">0</dd></dl>
     </div>
     <p id="practica-mensaje" class="mensaje">Dibuja el número y toca Revisar.</p>
-    <div class="fila-botones">
-      <button id="practica-revisar" class="boton boton-principal" type="button">Revisar</button>
-      <button id="practica-otro" class="boton boton-suave" type="button">Otro número</button>
+    <div class="botonera">
+      <button id="practica-revisar" class="control control-firme" type="button">Revisar</button>
+      <button id="practica-otro" class="control" type="button">Otro número</button>
     </div>
   </section>
 
   <!-- ===== Modo cuenta ===== -->
-  <section class="tarjeta vista" id="vista-cuenta" role="tabpanel" aria-labelledby="tab-cuenta" hidden>
+  <section class="vista" id="vista-cuenta" role="tabpanel" aria-labelledby="tab-cuenta" hidden>
     <p class="nota">Escribe un precio o una cantidad y agrégalo a la cuenta. Si una cifra quedó mal, tócala en la lista para corregirla.</p>
-    <div class="fila-botones">
-      <button id="cuenta-agregar" class="boton boton-principal" type="button">Agregar a la cuenta</button>
-      <button id="cuenta-vaciar" class="boton boton-suave" type="button">Vaciar</button>
+    <div class="botonera">
+      <button id="cuenta-agregar" class="control control-firme" type="button">Agregar a la cuenta</button>
+      <button id="cuenta-vaciar" class="control" type="button">Vaciar</button>
     </div>
     <ul id="cuenta-lista" class="cuenta-lista"></ul>
-    <div class="cuenta-total">
-      <span>Total</span>
-      <output id="cuenta-total">0</output>
-    </div>
+    <dl class="total">
+      <dt>Total</dt>
+      <dd><output id="cuenta-total" class="num">0</output></dd>
+    </dl>
     <p id="cuenta-riesgo" class="nota"></p>
   </section>
 
   <!-- ===== Modo libre ===== -->
-  <section class="tarjeta vista" id="vista-libre" role="tabpanel" aria-labelledby="tab-libre" hidden>
+  <section class="vista" id="vista-libre" role="tabpanel" aria-labelledby="tab-libre" hidden>
     <p class="nota">Dibuja lo que quieras y mira cómo lo lee la red. Abre el panel de abajo para ver qué pasa por dentro mientras dibujas.</p>
     <div id="cifras-detectadas" class="cifras-detectadas"></div>
   </section>
 
-  <!-- ===== Panel: la red por dentro ===== -->
+  <!-- ===== El panel ===== -->
   <section class="panel" id="panel">
     <button id="panel-boton" class="panel-boton" type="button" aria-expanded="false" aria-controls="panel-cuerpo">
       <span class="panel-titulo">Ver la red por dentro</span>
-      <span class="panel-flecha" aria-hidden="true">▾</span>
+      <svg class="panel-signo" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+        <path d="M3 6l5 5 5-5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
     </button>
+
     <div id="panel-cuerpo" class="panel-cuerpo" hidden>
-      <nav class="subpestanas" role="tablist" aria-label="Secciones del panel">
-        <button class="subpestana" role="tab" aria-selected="true" data-seccion="capas">Capas</button>
-        <button class="subpestana" role="tab" aria-selected="false" data-seccion="neuronas">Neuronas</button>
-        <button class="subpestana" role="tab" aria-selected="false" data-seccion="calculo">Cálculo</button>
-        <button class="subpestana" role="tab" aria-selected="false" data-seccion="discreta">Discreta</button>
-        <button class="subpestana" role="tab" aria-selected="false" data-seccion="entrenar">Entrenar</button>
+      <nav class="subpestanas" aria-label="Secciones del panel">
+        <button class="subpestana" role="tab" aria-selected="true" data-seccion="capas" type="button">Capas</button>
+        <button class="subpestana" role="tab" aria-selected="false" data-seccion="neuronas" type="button">Neuronas</button>
+        <button class="subpestana" role="tab" aria-selected="false" data-seccion="calculo" type="button">Cálculo</button>
+        <button class="subpestana" role="tab" aria-selected="false" data-seccion="discreta" type="button">Discreta</button>
+        <button class="subpestana" role="tab" aria-selected="false" data-seccion="entrenar" type="button">Entrenar</button>
       </nav>
 
       <div class="seccion" data-seccion="capas">
         <p class="nota">Cada punto es una neurona. Entre más encendida, más se activa con lo que acabas de dibujar. Toca una neurona para ver qué mira.</p>
-        <div class="diagrama-caja">
+        <div class="lamina">
           <canvas id="diagrama" aria-label="Diagrama de la red con las neuronas encendidas"></canvas>
         </div>
-        <div class="leyenda" id="leyenda-capas"></div>
+        <dl id="leyenda-capas" class="ficha"></dl>
       </div>
 
       <div class="seccion" data-seccion="neuronas" hidden>
         <p class="nota">Los pesos de cada neurona de la primera capa, vistos como imagen de 28×28. El rojo suma y el azul resta: la neurona se activa cuando el trazo cae sobre el rojo y evita el azul.</p>
-        <div class="controles-neuronas">
-          <label><input type="checkbox" id="solo-activas" checked> Mostrar solo las más activas</label>
-        </div>
+        <label class="casilla"><input type="checkbox" id="solo-activas" checked> Mostrar solo las más activas</label>
         <div id="rejilla-neuronas" class="rejilla-neuronas"></div>
-        <div class="comparacion-plantillas">
+        <div class="comparacion">
           <h3>Los pesos no son un retrato del dígito</h3>
-          <p class="nota">Es tentador esperar que los pesos se parezcan al número, pero no es así, ni siquiera en un modelo de una sola capa. Abajo están las dos cosas para comparar: la imagen promedio de cada dígito, que sí parece un dígito, y los pesos que aprende una regresión logística sin capas ocultas, que se ven revueltos. La razón es que los pesos no describen cómo es el dígito, sino qué lo distingue de los otros nueve. Con todo, esa regresión acierta <strong id="plantillas-acc">—</strong> y la red de este proyecto <strong id="plantillas-acc-red">—</strong>.</p>
+          <p class="nota">Es tentador esperar que los pesos se parezcan al número, pero no es así, ni siquiera en un modelo de una sola capa. Abajo están las dos cosas para comparar: la imagen promedio de cada dígito, que sí parece un dígito, y los pesos que aprende una regresión logística sin capas ocultas, que se ven revueltos. La razón es que los pesos no describen cómo es el dígito, sino qué lo distingue de los otros nueve. Con todo, esa regresión acierta <strong id="plantillas-acc" class="num"></strong> y la red de este proyecto <strong id="plantillas-acc-red" class="num"></strong>.</p>
           <div id="plantillas" class="comparacion-filas"></div>
         </div>
       </div>
@@ -166,35 +167,37 @@
 
       <div class="seccion" data-seccion="entrenar" hidden>
         <p class="nota">La red aprendió con dígitos escritos con lápiz por otras personas. Aquí puedes guardar tus propios trazos y reentrenarla para que se acostumbre a tu letra.</p>
-        <div class="guardar-muestra">
-          <span class="etiqueta-campo">Guardar el dibujo actual como…</span>
-          <div id="guardar-botones" class="guardar-botones"></div>
+        <div class="guardar">
+          <p class="guardar-pregunta" id="guardar-rotulo">Guardar el dibujo actual como</p>
+          <div id="guardar-botones" class="guardar-botones" role="group" aria-labelledby="guardar-rotulo"></div>
         </div>
-        <div class="muestras-resumen">
-          <p id="muestras-texto" class="nota">Todavía no has guardado ningún dibujo.</p>
-          <div id="muestras-conteo" class="muestras-conteo"></div>
+        <p id="muestras-texto" class="nota">Todavía no has guardado ningún dibujo.</p>
+        <div id="muestras-conteo" class="muestras-conteo"></div>
+        <div class="botonera">
+          <button id="btn-reentrenar" class="control control-firme" type="button" disabled>Reentrenar</button>
+          <button id="btn-restaurar" class="control" type="button">Volver a la red original</button>
+          <button id="btn-borrar-muestras" class="control" type="button">Borrar mis dibujos</button>
         </div>
-        <div class="fila-botones">
-          <button id="btn-reentrenar" class="boton boton-principal" type="button" disabled>Reentrenar</button>
-          <button id="btn-restaurar" class="boton boton-suave" type="button">Volver a la red original</button>
-          <button id="btn-borrar-muestras" class="boton boton-suave" type="button">Borrar mis dibujos</button>
-        </div>
-        <div class="entrenamiento-estado">
+        <div class="lamina lamina-curva">
           <canvas id="curva" aria-label="Curva de pérdida del reentrenamiento"></canvas>
-          <p id="entrenar-mensaje" class="nota"></p>
         </div>
+        <p id="entrenar-mensaje" class="nota"></p>
       </div>
     </div>
   </section>
 
   <footer class="pie">
-    <p>
-      Red densa de <span id="pie-arquitectura">—</span>, entrenada con 10&nbsp;000 dígitos escritos a mano
-      (<a href="https://github.com/cazala/mnist" target="_blank" rel="noopener">paquete <code>mnist</code></a>, licencia MIT,
-      tomados de la base MNIST de LeCun, Cortes y Burges).
-      Exactitud en el conjunto de prueba: <strong id="pie-accuracy">—</strong>.
-    </p>
-    <p>Proyecto de Matemáticas Discretas · Universidad del Norte · todo corre en tu dispositivo, sin enviar nada a ningún servidor.</p>
+    <dl class="pie-ficha">
+      <dt>Red</dt>
+      <dd><span id="pie-arquitectura" class="num"></span>, densa, con ReLU y softmax</dd>
+      <dt>Exactitud en el conjunto de prueba</dt>
+      <dd><span id="pie-accuracy" class="num"></span></dd>
+      <dt>Datos</dt>
+      <dd>10 000 dígitos escritos a mano del <a href="https://github.com/cazala/mnist" target="_blank" rel="noopener">paquete <code>mnist</code></a>, licencia MIT, tomados de la base MNIST de LeCun, Cortes y Burges</dd>
+      <dt>Proyecto</dt>
+      <dd>Matemáticas Discretas, Universidad del Norte</dd>
+    </dl>
+    <p class="pie-nota">Todo corre en tu dispositivo. No se envía nada a ningún servidor.</p>
   </footer>
 </main>
 

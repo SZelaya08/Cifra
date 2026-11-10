@@ -4,9 +4,10 @@ Uso: python3 -I un_solo_archivo.py <carpeta_docs> <salida.html>
 
 La version normal (docs/) necesita un servidor, porque usa modulos de
 JavaScript y fetch, y los navegadores bloquean las dos cosas cuando la pagina
-se abre con file://. Esta version mete todo adentro del HTML: el CSS, los
-cuatro archivos de JavaScript, los pesos, las plantillas y el mosaico de
-imagenes de referencia como data URI. Asi no hace falta nada mas.
+se abre con file://. Esta version mete todo adentro del HTML: las hojas de
+estilo (incluidas las que estilos.css importa), las tipografias, los cuatro
+archivos de JavaScript, los pesos, las plantillas y el mosaico de imagenes de
+referencia. Asi no hace falta nada mas, ni siquiera internet.
 
 Es exactamente la misma app; cambia solo la forma de empaquetarla.
 """
@@ -33,9 +34,35 @@ def limpiar_modulo(texto, nombre):
     return limpio
 
 
+def juntar_css(docs, nombre, vistos=None):
+    """Lee una hoja de estilo y pega en su lugar las que importa."""
+    vistos = vistos if vistos is not None else set()
+    if nombre in vistos:
+        return ""
+    vistos.add(nombre)
+    texto = open(f"{docs}/{nombre}", encoding="utf-8").read()
+
+    def reemplazo(m):
+        return juntar_css(docs, m.group(1), vistos)
+
+    return re.sub(r'@import\s+url\(\s*"\./([^"]+)"\s*\);', reemplazo, texto)
+
+
+def incrustar_tipografias(css, docs):
+    """Cambia cada url(tipografias/x.woff2) por el archivo en base64."""
+    def reemplazo(m):
+        ruta = f"{docs}/{m.group(1)}"
+        if not os.path.exists(ruta):
+            raise SystemExit(f"No encontré la tipografía {ruta}")
+        datos = base64.b64encode(open(ruta, "rb").read()).decode()
+        return f'url("data:font/woff2;base64,{datos}") format("woff2")'
+
+    return re.sub(r'url\("(tipografias/[^"]+\.woff2)"\)\s*format\("woff2"\)', reemplazo, css)
+
+
 def main(docs, salida):
     html = open(f"{docs}/index.html", encoding="utf-8").read()
-    css = open(f"{docs}/estilos.css", encoding="utf-8").read()
+    css = incrustar_tipografias(juntar_css(docs, "estilos.css"), docs)
     pesos = open(f"{docs}/pesos.json", encoding="utf-8").read()
     plantillas = open(f"{docs}/plantillas.json", encoding="utf-8").read()
     anclas = base64.b64encode(open(f"{docs}/anclas.png", "rb").read()).decode()
@@ -63,12 +90,15 @@ def main(docs, salida):
              f"const PLANTILLAS_INCRUSTADAS = {plantillas};\n"
              f'const ANCLAS_INCRUSTADAS = "data:image/png;base64,{anclas}";\n')
 
-    html = html.replace('<link rel="stylesheet" href="estilos.css">',
-                        f"<style>\n{css}\n</style>")
-    html = html.replace('<script type="module" src="app.js"></script>',
-                        f'<script type="module">\n{datos}\n{js}\n</script>')
-    # Las tipografías se dejan como están: si no hay internet, el navegador usa
-    # las de reserva y la página se ve bien igual.
+    enlace = '<link rel="stylesheet" href="estilos.css">'
+    if enlace not in html:
+        raise SystemExit("No encontré el enlace a estilos.css en index.html")
+    html = html.replace(enlace, f"<style>\n{css}\n</style>")
+
+    script = '<script type="module" src="app.js"></script>'
+    if script not in html:
+        raise SystemExit("No encontré el script de app.js en index.html")
+    html = html.replace(script, f'<script type="module">\n{datos}\n{js}\n</script>')
 
     open(salida, "w", encoding="utf-8").write(html)
     print(f"{salida}  {os.path.getsize(salida) / 1024 / 1024:.2f} MB")
