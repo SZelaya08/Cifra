@@ -15,3 +15,13 @@ desktop.ini
 # temporales
 *.log
 *.tmp
+
+# proyecto anterior de riesgo académico: se conserva en el disco como
+# respaldo del proceso, pero no hace falta en el repositorio
+archivo-riesgo-academico/
+
+# temporales y salidas de los editores de documentos
+~$*.docx
+~$*.doc
+~$*.xlsx
+*.pdf

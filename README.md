@@ -84,9 +84,12 @@ codigo/          Python y pruebas
 datos/           el dataset y la partición
 resultados/      métricas, figuras y salidas de las pruebas
 capturas/        capturas de la app
-BITACORA.md      qué se hizo en cada paso y por qué
-PLAN_TODO.md     el plan por tareas
-PROBLEMA.md      el problema, las hipótesis y los límites
+
+documentacion/   lo escrito del proyecto
+  Informe-Cifra.docx  el informe completo, con los datos ya medidos
+  BITACORA.md         qué se hizo en cada paso y por qué
+  PLAN_TODO.md        el plan por tareas
+  PROBLEMA.md         el problema, las hipótesis y los límites
 ```
 
 ## Reproducir el entrenamiento
