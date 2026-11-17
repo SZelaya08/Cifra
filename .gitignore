@@ -25,3 +25,7 @@ archivo-riesgo-academico/
 ~$*.doc
 ~$*.xlsx
 *.pdf
+
+# entrega final: los PDF y las fuentes compiladas se arman desde
+# documentacion/, no hace falta duplicarlos en el repositorio
+Entrega Final/

@@ -10,6 +10,8 @@ números reales y la parte de matemática discreta detrás de todo.
 Todo corre en el navegador. No hay servidor, ni API, ni se envía nada a ninguna
 parte.
 
+**Probarla sin instalar nada:** https://szelaya08.github.io/Cifra/
+
 ## Los dos usos
 
 - **Práctica** — la app pide un número, se dibuja y responde qué leyó. Pensado
@@ -86,10 +88,12 @@ resultados/      métricas, figuras y salidas de las pruebas
 capturas/        capturas de la app
 
 documentacion/   lo escrito del proyecto
-  Informe-Cifra.docx  el informe completo, con los datos ya medidos
-  BITACORA.md         qué se hizo en cada paso y por qué
-  PLAN_TODO.md        el plan por tareas
-  PROBLEMA.md         el problema, las hipótesis y los límites
+  informe-latex/       el informe final en LaTeX, con sus figuras y el PDF
+  presentacion-beamer/ la presentación de la sustentación, en Beamer
+  BITACORA.md          qué se hizo en cada paso y por qué
+  PLAN_TODO.md         el plan por tareas
+  PROBLEMA.md          el problema, las hipótesis y los límites
+  Informe-Cifra.docx   la versión en Word de la que salió el informe
 ```
 
 ## Reproducir el entrenamiento
